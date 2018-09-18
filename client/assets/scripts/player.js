@@ -1,10 +1,8 @@
 const player = document.getElementById('player');
 
-let keys = {
-  top: false,
-  right: false,
-  bottom: false,
-  left: false,
+let speed = {
+  x: 0,
+  y: 0
 }
 
 const usedKeys = ["z","q","s","d"];
@@ -12,65 +10,57 @@ const usedKeys = ["z","q","s","d"];
 window.addEventListener("keydown", (key) => {
   if (!key.repeat && usedKeys.includes(key.key)) {
     if (key.key === "z") {
-      keys.top = true;
+      speed.y ++;
     } else if (key.key === "s") {
-      keys.bottom = true;
-    } else if (key.key === "q") {
-      keys.left = true;
+      speed.y --;
     } else if (key.key === "d") {
-      keys.right = true;
+      speed.x ++;
+    } else if (key.key === "q") {
+      speed.x --;
     }
-    checkDirection(keys);
+    checkDirection(speed);
   }
 }, false);
 
 window.addEventListener("keyup", (key) => {
   if (!key.repeat && usedKeys.includes(key.key)) {
     if (key.key === "z") {
-      keys.top = false;
+      speed.y --;
     } else if (key.key === "s") {
-      keys.bottom = false;
-    } else if (key.key === "q") {
-      keys.left = false;
+      speed.y ++;
     } else if (key.key === "d") {
-      keys.right = false;
+      speed.x --;
+    } else if (key.key === "q") {
+      speed.x ++;
     }
-    checkDirection(keys);
+    checkDirection(speed);
   }
 }, false);
 
 
-const checkDirection = ({ top, right, bottom, left }) => {
-  let direction;
+const checkDirection = ({x, y}) => {
+  let direction = "";
 
-  if (left) {
-    direction = "left"
-  }
-
-  if (right) {
-    direction = "right"
-  }
-
-  if (top) {
+  if (y > 0) {
     direction = "top";
-    if (left) {
-      direction += "-left";
-    } else if (right) {
+    if (x > 0) {
       direction += "-right";
-    }  
-  }  
-
-  if (bottom) {
+    } else if (x < 0) {
+      direction += "-left";
+    }
+  } else if (y < 0) {
     direction = "bottom";
-    if (left) {
-      direction += "-left";
-    } else if (right) {
+    if (x > 0) {
       direction += "-right";
-    }  
-  }
-
-  if (!left && !bottom && !right && !top) {
-    direction = "";
+    } else if (x < 0) {
+      direction += "-left";
+    }
+  } else {
+    if (x > 0) {
+      direction = "right";
+    } else if (x < 0) {
+      direction = "left";
+    }
   }
   
   player.dataset.direction = direction;
