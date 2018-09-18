@@ -1,0 +1,71 @@
+:root {
+  --tile-scale: 128px;
+  --framerate: 10;
+
+  image-rendering: optimizeSpeed;
+}
+
+body {
+  margin: 0;
+  background-image: url('assets/ground/grass01.png');
+  background-repeat: repeat;
+  background-size: var(--tile-scale);
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#player {
+  background-image: url('assets/player/spritesheet.png');
+  height: var(--tile-scale);
+  width: var(--tile-scale);
+  background-size: calc(6 * var(--tile-scale));
+}
+
+#player[data-direction=bottom] {
+  background-position-y: calc(-0 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=bottom-left] {
+  background-position-y: calc(-1 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=left] {
+  background-position-y: calc(-2 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=top-left] {
+  background-position-y: calc(-3 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=top] {
+  background-position-y: calc(-4 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=top-right] {
+  background-position-y: calc(-5 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=right] {
+  background-position-y: calc(-6 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+#player[data-direction=bottom-right] {
+  background-position-y: calc(-7 * var(--tile-scale));
+  animation: walk calc(5s / var(--framerate)) steps(6) infinite;
+}
+
+
+@keyframes walk {
+  from { background-position-x: 0 }
+  to { background-position-x: calc(-6 * var(--tile-scale)) }
+}
