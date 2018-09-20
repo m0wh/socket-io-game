@@ -1,85 +1,70 @@
-const player = document.getElementById('player');
-const framerate = 30;
+class Player {
+  constructor(selector, initialX, initialY, playable) {
+    this.element = document.querySelector(selector);
+    this.x = initialX;
+    this.y = initialY;
+    this._speedX = 0;
+    this._speedY = 0;
+    this.speed = 10;
+    this.direction = "bottom";
+    this.playable = playable;
+  }
 
-let speed = {
-  x: 0,
-  y: 0,
-  scl: 6
+  set speedX(n) {
+    this._speedX = n
+  }
+
+  set speedY(n) {
+    this._speedY = n
+  }
+
+  checkDirection() {
+    if (this._speedY < 0) {
+      if (this._speedX > 0) {
+        this.direction = "top-right";
+      } else if (this._speedX < 0) {
+        this.direction = "top-left";
+      } else {
+        this.direction = "top";
+      }
+    } else if (this._speedY > 0) {
+      if (this._speedX > 0) {
+        this.direction = "bottom-right";
+      } else if (this._speedX < 0) {
+        this.direction = "bottom-left";
+      } else {
+        this.direction = "bottom";
+      }
+    } else {
+      if (this._speedX > 0) {
+        this.direction = "right";
+      } else if (this._speedX < 0) {
+        this.direction = "left";
+      } else {
+        this.direction = "";
+      }
+    }
+  }
+
+  update() {
+    this.checkDirection();
+
+    if (this.direction.includes("-")) { // diagnonal movment
+      this.x += this._speedX * this.speed * Math.cos(Math.PI/4);
+      this.y += this._speedY * this.speed * Math.sin(Math.PI/4);
+    } else {
+      this.x += this._speedX * this.speed;
+      this.y += this._speedY * this.speed;
+    }
+
+    this.draw();
+  }
+
+  draw() {
+    if (this.element) {
+      this.element.dataset.direction = this.direction;
+      this.element.style.left = this.x + "px";
+      this.element.style.top = this.y + "px";
+    }
+  }
 }
-
-const usedKeys = ["z","q","s","d"];
-
-window.addEventListener("keydown", (key) => {
-  if (!key.repeat && usedKeys.includes(key.key)) {
-    if (key.key === "z") {
-      speed.y ++;
-    } else if (key.key === "s") {
-      speed.y --;
-    } else if (key.key === "d") {
-      speed.x ++;
-    } else if (key.key === "q") {
-      speed.x --;
-    }
-    checkDirection(speed);
-  }
-}, false);
-
-window.addEventListener("keyup", (key) => {
-  if (!key.repeat && usedKeys.includes(key.key)) {
-    if (key.key === "z") {
-      speed.y --;
-    } else if (key.key === "s") {
-      speed.y ++;
-    } else if (key.key === "d") {
-      speed.x --;
-    } else if (key.key === "q") {
-      speed.x ++;
-    }
-    checkDirection(speed);
-  }
-}, false);
-
-
-const checkDirection = ({x, y}) => {
-  let direction = "";
-
-  if (y > 0) {
-    direction = "top";
-    if (x > 0) {
-      direction += "-right";
-    } else if (x < 0) {
-      direction += "-left";
-    }
-  } else if (y < 0) {
-    direction = "bottom";
-    if (x > 0) {
-      direction += "-right";
-    } else if (x < 0) {
-      direction += "-left";
-    }
-  } else {
-    if (x > 0) {
-      direction = "right";
-    } else if (x < 0) {
-      direction = "left";
-    }
-  }
-  
-  player.dataset.direction = direction;
-}
-
-setInterval(() => {
-  
-  
-  if (player.dataset.direction.includes("-")) { // if diagonal
-    player.dataset.x = Number(player.dataset.x) + speed.x * speed.scl * Math.cos(Math.PI / 4);
-    player.dataset.y = Number(player.dataset.y) + speed.y * speed.scl * Math.sin(Math.PI / 4);
-  } else {
-    player.dataset.x = Number(player.dataset.x) + speed.x * speed.scl;
-    player.dataset.y = Number(player.dataset.y) + speed.y * speed.scl;
-  }
-
-  player.style.left = player.dataset.x + "px";
-  player.style.bottom = player.dataset.y + "px";
-
-}, 1000/framerate);
