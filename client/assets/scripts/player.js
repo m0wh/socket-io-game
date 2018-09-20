@@ -1,8 +1,10 @@
 const player = document.getElementById('player');
+const framerate = 30;
 
 let speed = {
   x: 0,
-  y: 0
+  y: 0,
+  scl: 6
 }
 
 const usedKeys = ["z","q","s","d"];
@@ -65,3 +67,19 @@ const checkDirection = ({x, y}) => {
   
   player.dataset.direction = direction;
 }
+
+setInterval(() => {
+  
+  
+  if (player.dataset.direction.includes("-")) { // if diagonal
+    player.dataset.x = Number(player.dataset.x) + speed.x * speed.scl * Math.cos(Math.PI / 4);
+    player.dataset.y = Number(player.dataset.y) + speed.y * speed.scl * Math.sin(Math.PI / 4);
+  } else {
+    player.dataset.x = Number(player.dataset.x) + speed.x * speed.scl;
+    player.dataset.y = Number(player.dataset.y) + speed.y * speed.scl;
+  }
+
+  player.style.left = player.dataset.x + "px";
+  player.style.bottom = player.dataset.y + "px";
+
+}, 1000/framerate);

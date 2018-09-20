@@ -7,14 +7,21 @@
 
 body {
   margin: 0;
-  background-image: url('assets/ground/grass01.png');
-  background-repeat: repeat;
-  background-size: var(--tile-scale);
   min-height: 100vh;
-
+  
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#game {
+  background-image: url('assets/ground/grass01.png');
+  background-repeat: repeat;
+  background-size: var(--tile-scale);
+  
+  width: 800px;
+  height: 600px;
+  position: relative;
 }
 
 #player {
@@ -22,6 +29,8 @@ body {
   height: var(--tile-scale);
   width: var(--tile-scale);
   background-size: calc(6 * var(--tile-scale));
+
+  position: absolute;
 }
 
 #player[data-direction=bottom] {
