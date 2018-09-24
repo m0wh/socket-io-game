@@ -1,3 +1,24 @@
+const socket = io();
+const game = document.getElementById("game");
+let myId;
+let born = false;
+
+socket.on('newPlayer', (playerObject) => {
+  drawPlayer(playerObject);
+});
+
+socket.on('welcome', ({ me, oldPlayers }) => {
+  drawPlayer(me, true);
+  oldPlayers.forEach(drawPlayer);
+});
+
+socket.on('playerMove', (playerObject) => {
+  updatePlayer(playerObject);
+});
+
+
+/* ====== INPUT ====== */
+
 const input = {
   x: 0,
   y: 0
@@ -16,6 +37,7 @@ window.addEventListener("keydown", (key) => {
     } else if (key.key === "q") {
       input.x --;
     }
+    socket.emit('move', input);
   }
 }, false);
 
@@ -30,20 +52,26 @@ window.addEventListener("keyup", (key) => {
     } else if (key.key === "q") {
       input.x ++;
     }
+    socket.emit('move', input);
   }
 }, false);
 
-const malo = new Player("#malo", 400, 300, true);
-const paul = new Player("#paul", 200, 150, true);
 
-setInterval(function() {
+const drawPlayer = ({id, x, y, direction, name}, isMe = false) => {
+  game.innerHTML += `<div class="player" id="p${id}" data-direction="${direction}" data-name="${name}"></div>`;
+  const player = game.querySelector("#p" + id);
+  player.style.left = x + "px";
+  player.style.top = y + "px";
+  player.style.zIndex = y + "";
+  if (isMe) {
+    player.classList.add("me");
+  }
+}
 
-  malo.speedX = input.x;
-  malo.speedY = input.y;
-  malo.update();
-
-  paul.speedX = input.x;
-  paul.speedY = input.y;
-  paul.update();
-
-}, 1000 / 30);
+const updatePlayer = ({id, x, y, direction}) => {
+  const player = game.querySelector("#p" + id);
+  player.style.left = x + "px";
+  player.style.top = y + "px";
+  player.style.zIndex = Math.floor(y);
+  player.dataset.direction = direction;
+}

@@ -1,13 +1,15 @@
-class Player {
-  constructor(selector, initialX, initialY, playable) {
-    this.element = document.querySelector(selector);
-    this.x = initialX;
-    this.y = initialY;
+const names = require('./names');
+
+module.exports = class Player {
+  constructor(id) {
+    this.id = id;
+    this.x = 0;
+    this.y = 0;
     this._speedX = 0;
     this._speedY = 0;
     this.speed = 10;
-    this.direction = "bottom";
-    this.playable = playable;
+    this.direction = "";
+    this.name = names[Math.floor(Math.random() * names.length)];
   }
 
   set speedX(n) {
@@ -16,6 +18,16 @@ class Player {
 
   set speedY(n) {
     this._speedY = n
+  }
+
+  get public() {
+    return {
+      id: this.id,
+      x: this.x,
+      y: this.y,
+      direction: this.direction,
+      name: this.name
+    }
   }
 
   checkDirection() {
@@ -55,16 +67,6 @@ class Player {
     } else {
       this.x += this._speedX * this.speed;
       this.y += this._speedY * this.speed;
-    }
-
-    this.draw();
-  }
-
-  draw() {
-    if (this.element) {
-      this.element.dataset.direction = this.direction;
-      this.element.style.left = this.x + "px";
-      this.element.style.top = this.y + "px";
     }
   }
 }

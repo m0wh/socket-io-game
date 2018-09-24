@@ -29,8 +29,22 @@ body {
   height: var(--tile-scale);
   width: var(--tile-scale);
   background-size: calc(6 * var(--tile-scale));
-
   position: absolute;
+}
+
+.player.me {
+  background-image: url('assets/player/spritesheet-alt.png');
+}
+
+.player::after {
+  content: attr(data-name);
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
 }
 
 .player[data-direction=bottom] {
