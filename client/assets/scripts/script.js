@@ -16,6 +16,14 @@ socket.on('playerMove', (playerObject) => {
   updatePlayer(playerObject);
 });
 
+socket.on('playerDisconnection', id => {
+  deletePlayer(id);
+});
+
+socket.on('updatePlayerPositions', players => {
+  players.forEach(updatePlayer);
+  console.log("hé")
+});
 
 /* ====== INPUT ====== */
 
@@ -74,4 +82,9 @@ const updatePlayer = ({id, x, y, direction}) => {
   player.style.top = y + "px";
   player.style.zIndex = Math.floor(y);
   player.dataset.direction = direction;
+}
+
+const deletePlayer = id => {
+  const player = game.querySelector("#p" + id);
+  player.remove();
 }
